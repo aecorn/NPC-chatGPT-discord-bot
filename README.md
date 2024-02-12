@@ -156,7 +156,7 @@
 ------
 ## Commands
 
-* `/chat [message]` Chat with ChatGPT!
+* `/talk [message]` Chat with ChatGPT!
 * `/draw [prompt]` Generate an image with the Dalle2 model
 * `/switchpersona [persona]` Switch between optional chatGPT jailbreaks
    * `random`: Picks a random persona
@@ -172,13 +172,7 @@
 * `/public` ChatGPT switch to public mode
 * `/replyall` ChatGPT switch between replyAll mode and default mode
 * `/reset` Clear ChatGPT conversation history
-* `/chat-model` Switch different chat model
-   * `OFFICIAL-GPT-3.5`: GPT-3.5 model
-   * `OFFICIAL-GPT-4.0`: GPT-4.0 model (make sure your account can access gpt-4 model)
-   * `Website ChatGPT-3.5`: Website ChatGPT-3.5 model (UNOFFICIAL)
-   * `Website ChatGPT-4.0`: Website ChatGPT-4.0 model (UNOFFICIAL)(available if you got a plus account)
-   * `Bard`: Google Bard Model
-   * `Bing`: Microsoft Bing Model
+
 ### Special Features
 
 #### Draw

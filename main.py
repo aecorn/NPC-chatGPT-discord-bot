@@ -1,6 +1,7 @@
 import sys
 import pkg_resources
 
+from worldanvil import setup_npcs
 from src import bot
 from src.log import logger
 from dotenv import load_dotenv
@@ -28,4 +29,6 @@ def check_version() -> None:
 
 if __name__ == '__main__':
     check_version()
+    setup_npcs()
+
     bot.run_discord_bot()
