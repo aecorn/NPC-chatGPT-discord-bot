@@ -7,7 +7,7 @@ from random import randrange
 from src.aclient import client
 from discord import app_commands
 from src import log, personas, responses, setup_npcs
-from worldanvil.npcs import PERSONAS
+from worldanvil.npcs import PERSONAS, LOCATIONS
 
 
 def run_discord_bot():
@@ -23,7 +23,11 @@ def run_discord_bot():
         loop = asyncio.get_event_loop()
         loop.create_task(client.process_messages())
         logger.info(f'{client.user} is now running!')
-        
+
+    @client.event
+    async def on_member_join(member):
+        await member.send(LOCATIONS["intro"])
+
     @client.tree.command(name="travel", description="Move to different location, with other NPCs")
     async def travel(interaction: discord.Interaction, *, location: str):
         await interaction.response.defer(ephemeral=False)
@@ -31,7 +35,6 @@ def run_discord_bot():
         logger.info(
             f"\x1b[31m{username}\x1b[0m : /travel [{location}] in ({client.current_channel})")
         await setup_npcs.setup_npc_channels(client, location)
-        await interaction.followup.send(f"Travelled to {location}")
 
     @client.tree.command(name="locations", description="List available locations to travel to")
     async def locations(interaction: discord.Interaction):
@@ -39,7 +42,8 @@ def run_discord_bot():
         username = str(interaction.user)
         logger.info(
             f"\x1b[31m{username}\x1b[0m : /locations in ({client.current_channel})")
-        locations_str = "Locations you can /travel to are:\n" + "\n".join(set([char.split("-")[-1].capitalize() for char in PERSONAS.keys()]))
+        filtered_locations = [name for name, attributes in LOCATIONS.items() if isinstance(attributes, dict) and not attributes["secret"]]
+        locations_str = "Locations you can /travel to are:\n" + "\n".join(filtered_locations)
         await interaction.followup.send(locations_str)
 
 
@@ -56,7 +60,7 @@ def run_discord_bot():
         username = str(interaction.user)
         client.current_channel = interaction.channel
         logger.info(
-            f"\x1b[31m{username}\x1b[0m : /chat [{message}] in ({client.current_channel})")
+            f"\x1b[31m{username}\x1b[0m : /talk [{message}] in ({client.current_channel})")
 
         await client.enqueue_message(interaction, message)
 

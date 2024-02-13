@@ -81,9 +81,20 @@ class aclient(discord.Client):
         else:
             author = message.author.id
         try:
+            #await user_message.user.edit(nick=PERSONAS[persona]['full_name'])
             response = (f'> <@{str(author)}>: **{user_message}** \n\n')
             response = f"{response}{PERSONAS[persona]['full_name']}: {await responses.official_handle_response(user_message, self, persona)}"
+            #previous_name = message.display_name
+            embed = discord.Embed()
+            with open(PERSONAS[persona]['img'], 'rb') as f:
+                picture = discord.File(f, filename="avatar.webp")
+            embed.set_thumbnail(url="attachment://avatar.webp")
+            await message.edit_original_response(embed=embed)
+            #await message.guild.me.edit(nick=None)
+            #print(dir(message.response))
+            #await message.edit(display_name=PERSONAS[persona]['full_name'])
             await send_split_message(self, response, message)
+            #await message.guild.me.edit(name=previous_name)
         except Exception as e:
             logger.exception(f"Error while sending : {e}")
             if self.is_replying_all == "True":

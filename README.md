@@ -1,13 +1,34 @@
-# ChatGPT Discord Bot
-
-> ### Build your own Discord bot using ChatGPT
+# discord-bot for TTRPG NPCs using ChatGPT
 
 ---
-> **Warning**
->
-> #### 2023-04-12 Bing now supported
-> #### 2023-03-27 Bard now supported
-> #### 2023-08-02 Unofficial GPT-4 is currently down
+
+## Commands
+
+* `/talk [message]` Chat with ChatGPT!
+* `/locations` List locations you can travel to
+* `/travel` Travel to a location, swapping out the NPCs
+
+### Special Features
+
+#### Mode
+
+* `public mode (default)`  the bot directly reply on the channel
+
+  ![image](https://user-images.githubusercontent.com/89479282/206565977-d7c5d405-fdb4-4202-bbdd-715b7c8e8415.gif)
+
+* `private mode` the bot's reply can only be seen by the person who used the command
+
+  ![image](https://user-images.githubusercontent.com/89479282/206565873-b181e600-e793-4a94-a978-47f806b986da.gif)
+
+* `replyall mode` the bot will reply to all messages in the channel without using slash commands (`/chat` will also be unavailable)
+
+   > **Warning**
+   > The bot will easily be triggered in `replyall` mode, which could cause program failures
+ ---
+
+
+---
+# Installation
 
 ### Chat
 
@@ -60,43 +81,7 @@
 3. Store the SECRET KEY to `.env` under the `OPENAI_API_KEY`
 
 ---
-## Step 2: Website ChatGPT authentication
 
-> **Only Support ChatGPT Plus Account**
-
-1. Open https://chat.openai.com/api/auth/session
-
-2. Open console with `F12`
-
-3. Open `Application` tab > Cookies
-
-   ![image](https://user-images.githubusercontent.com/89479282/229298001-41ab4f61-5b79-4c65-b08c-708ee6fe2304.png)
-
-4. Copy the value for `_puid` from cookies and paste it into `.env` under `PUID`
-
-5. Copy the value for `accessToken` from cookies and paste it into `.env` under `ACCESS_TOKEN`
-
----
-## Step 2: Google Bard authentication
-1. Go to https://bard.google.com/
-
-2. Open console with `F12`
-
-3. Open `Application` tab > Cookies
-
-4. Copy the value for `__Secure-1PSID` from cookies and paste it into `.env` under `BARD_SESSION_ID`
-
----
-## Step 2: Microsoft Bing authentication
-1. **Rename the file `cookies.dev.json` to `cookies.json`**
-
-2. Go to https://bing.com/chat and log in your Microsoft account
-
-3. Use Cookie Editor or similar extensions to export the cookies
-
-4. Paste it into `cookies.json`
-
----
 ## Step 3: Run the bot on the desktop
 
 1. Open a terminal or command prompt
@@ -116,90 +101,7 @@
    * `docker ps` to see the list of running services
    * `docker stop <BOT CONTAINER ID>` to stop the running bot
 
-### Have a good chat!
 ---
+## Step 4: Deploy bot to Google Compute Engine
 
-## Optional: Auto-Login
->  * The auto-login feature allows your bot to automatically login to either Google Bard or Microsoft Bing using provided credentials
->  * It will auto fetch the cookies you need
-
-*  To enable this feature, first specify your Chrome browser's version by filling in the `chrome_version` field in the `.env` file
-* Google Bard
-   1. set `bard_enable_auto_login` to `True` in `.env`
-   2. Fill `google_account` and `google_password` in `.env`
-
-      (NOTICE:  AUTO-LOGIN ONLY WORKS FOR GOOGLE ACCOUNT THAT DOES NOT HAVE 2FA)
-* Microsoft Bing
-   1. set `bing_enable_auto_login` to `True` in `.env`
-   2. Then fill `bing_account` and `bing_password` in `.env`
-
-## Optional: Setup system prompt
-
-* A system prompt would be invoked when the bot is first started or reset
-* You can set it up by modifying the content in `system_prompt.txt`
-* All the text in the file will be fired as a prompt to the bot
-* Get the first message from ChatGPT in your discord channel!
-* Go Discord setting turn `developer mode` on
-
-   1. Right-click the channel you want to recieve the message, `Copy  ID`
-
-        ![channel-id](https://user-images.githubusercontent.com/89479282/207697217-e03357b3-3b3d-44d0-b880-163217ed4a49.PNG)
-
-   2. paste it into `.env` under `DISCORD_CHANNEL_ID`
-
-## Optional: Disable logging
-
-* Set the value of `LOGGING` in the `.env` to False
-
-------
->  [**中文設置教學**](https://zero6992.me/2023/03/08/chatGPT-discord-bot-chinese/)
-------
-## Commands
-
-* `/talk [message]` Chat with ChatGPT!
-* `/draw [prompt]` Generate an image with the Dalle2 model
-* `/switchpersona [persona]` Switch between optional chatGPT jailbreaks
-   * `random`: Picks a random persona
-   * `chatGPT`: Standard chatGPT mode
-   * `dan`: Dan Mode 11.0, infamous Do Anything Now Mode
-   * `sda`: Superior DAN has even more freedom in DAN Mode
-   * `confidant`: Evil Confidant, evil trusted confidant
-   * `based`: BasedGPT v2, sexy gpt
-   * `oppo`: OPPO says exact opposite of what chatGPT would say
-   * `dev`: Developer Mode, v2 Developer mode enabled
-
-* `/private` ChatGPT switch to private mode
-* `/public` ChatGPT switch to public mode
-* `/replyall` ChatGPT switch between replyAll mode and default mode
-* `/reset` Clear ChatGPT conversation history
-
-### Special Features
-
-#### Draw
-
-![image](https://user-images.githubusercontent.com/91911303/223772051-13f840d5-99ef-4762-98d2-d15ce23cbbd5.png)
-
-#### Switch Persona
-
-> **Warning**
->
-> Using certain personas may generate vulgar or disturbing content. Use at your own risk.
-
-![image](https://user-images.githubusercontent.com/91911303/223772334-7aece61f-ead7-4119-bcd4-7274979c4702.png)
-
-
-#### Mode
-
-* `public mode (default)`  the bot directly reply on the channel
-
-  ![image](https://user-images.githubusercontent.com/89479282/206565977-d7c5d405-fdb4-4202-bbdd-715b7c8e8415.gif)
-
-* `private mode` the bot's reply can only be seen by the person who used the command
-
-  ![image](https://user-images.githubusercontent.com/89479282/206565873-b181e600-e793-4a94-a978-47f806b986da.gif)
-
-* `replyall mode` the bot will reply to all messages in the channel without using slash commands (`/chat` will also be unavailable)
-
-   > **Warning**
-   > The bot will easily be triggered in `replyall` mode, which could cause program failures
- ---
+---
