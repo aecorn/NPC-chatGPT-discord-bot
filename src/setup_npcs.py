@@ -33,7 +33,6 @@ async def setup_npc_channels(client, location="Prinberg"):
                 await new_channel.send(file=picture)
             await new_channel.send(npc_description + "\nUse the command /talk to talk to NPCs.")
 
-    print(guild.categories)
     # Create travel-log channel if not exists
     for maincategory in guild.categories:
         if maincategory.name == "Text Channels":
@@ -44,13 +43,15 @@ async def setup_npc_channels(client, location="Prinberg"):
     else:
         travel_log = possib_travel[0]
 
-    msg_str = f"[Current location: {location}]\n"
+    msg_start = "[Current location:"
+    msg_str = f"{msg_start} {location}]\n"
     #Delete the previous restart message
     async for msg in travel_log.history(limit=20):
-        if msg.content.startswith("[Current location:"):
+        if msg.content.startswith(msg_str):
             #print(msg)
             await msg.delete()
-
+    
+    
     if added:
         npc_string = "\n".join(added)
         msg_str += f"adding these NPCs:\n{npc_string}\n"
@@ -58,10 +59,8 @@ async def setup_npc_channels(client, location="Prinberg"):
         npc_string = "\n".join(deleted)
         msg_str += f"\ndeleting these NPCs (the history in the channels are gone):\n{npc_string}\n"
 
-    await travel_log.send(msg_str)
     locations_img = {k.lower(): v.get("img", None) for k, v in LOCATIONS.items() if isinstance(v, dict) and "img" in v}
     with open(locations_img[location.lower()], 'rb') as f:
         loc_picture = discord.File(f)
-        await travel_log.send(file=loc_picture)
-    locations_descriptions = locations_img = {k.lower(): v.get("description", None) for k, v in LOCATIONS.items() if isinstance(v, dict) and "img" in v}
-    await travel_log.send(locations_descriptions[location.lower()])
+    locations_descriptions = {k.lower(): v.get("description", None) for k, v in LOCATIONS.items() if isinstance(v, dict) and "img" in v}
+    await travel_log.send(msg_str + locations_descriptions[location.lower()], file=loc_picture)

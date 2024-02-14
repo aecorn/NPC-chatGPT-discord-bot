@@ -3,6 +3,7 @@ from discord import Message
 
 async def send_split_message(self, response: str, message: Message, has_followed_up=False):
     char_limit = 1900
+    
     if len(response) > char_limit:
         is_code_block = False
         parts = response.split("```")
@@ -29,6 +30,7 @@ async def send_split_message(self, response: str, message: Message, has_followed
     else:
         if self.is_replying_all == "True" or has_followed_up:
             await message.channel.send(response)
+            
         else:
             await message.followup.send(response)
             has_followed_up = True

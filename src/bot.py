@@ -62,7 +62,21 @@ def run_discord_bot():
         logger.info(
             f"\x1b[31m{username}\x1b[0m : /talk [{message}] in ({client.current_channel})")
 
+        #npc_name = str(client.current_channel)
+        #webhook = await client.current_channel.create_webhook(name=npc_name)
+        #await webhook.send(
+        #    str(message), username=npc_name, #avatar_url=member.avatar_url
+        #    )
         await client.enqueue_message(interaction, message)
+        #webhooks = await client.current_channel.webhooks()
+        #for webhook in webhooks:
+        #        await webhook.delete()
+        #history = client.current_channel.history(limit=1)
+        #async for msg in history:
+        #    print(msg.author.display_name, interaction.guild.me.nick)
+        #    if msg.author.display_name == interaction.guild.me.nick:
+        #        await msg.author.edit(name=str(client.current_channel))
+                #print(msg)
 
 
     @client.tree.command(name="private", description="Toggle private access")

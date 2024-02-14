@@ -41,7 +41,7 @@ intro = "Welcome to Zarthuga, a DnD setting in development by Carl, accompanied 
         img = "./worldanvil/img/armorer-dilja-guard-prinberg.WEBP"
         description = "Has lived a long life, and been dissapointed plenty. She is what stands between the Guard loosing their gear, and you."
         relations = []
-        figure_speech = "Sharp and irritated at the beginning, but softens up fast with some returned flatter or sweetness."
+        figure_speech = "Sharp and irritated at the beginning, but softens up fast with some returned flatter or sweetness. But over all quite bitter and snappy when she responds."
         secrets = [ ]
         prompt = "Fill in for Dilja"
 
