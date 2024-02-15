@@ -1,5 +1,5 @@
 # dictionary containing prompts to activate different personas
-import worldanvil.npcs as npcs
+import npc_content.npcs as npcs
 PERSONAS = {k: v["prompt"] for k, v in npcs.PERSONAS.items()}
 #print(PERSONAS)
 

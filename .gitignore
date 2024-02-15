@@ -1,6 +1,9 @@
 # Generated image files
 images/
 
+/npc_content/saved_chatbots/*.json
+/npc_content/img/thumbnails/*.jpg
+
 config.json
 cookies.json
 

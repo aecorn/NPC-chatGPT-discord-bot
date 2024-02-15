@@ -1,1 +1,0 @@
-from worldanvil.npcs import setup_npcs

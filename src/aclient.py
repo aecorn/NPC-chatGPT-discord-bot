@@ -8,7 +8,7 @@ from src import responses
 from src.log import logger
 from auto_login.AutoLogin import GoogleBardAutoLogin, MicrosoftBingAutoLogin
 from utils.message_utils import send_split_message, send_response_with_images
-from worldanvil.npcs import PERSONAS
+from npc_content.npcs import PERSONAS
 
 from dotenv import load_dotenv
 from discord import app_commands
@@ -46,9 +46,8 @@ class aclient(discord.Client):
             self.starting_prompt = f.read()
 
         self.chat_model = os.getenv("CHAT_MODEL")
-        self.chatbots = {}
-        for persona, attributes in PERSONAS.items():
-            self.chatbots[persona] = self.get_chatbot_model(prompt=attributes["prompt"])
+        self.chatbots, self.webhooks = {}, {}
+      
         self.message_queue = asyncio.Queue()
 
     def get_chatbot_model(self, prompt = None) -> Union[AsyncChatbot, Chatbot]:

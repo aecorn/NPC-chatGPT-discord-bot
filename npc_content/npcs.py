@@ -1,7 +1,43 @@
+import os
 import toml
+from PIL import Image
+
+def make_thumbnails():
+    img_folder = "./npc_content/img/"
+    thumb_folder = img_folder + "thumbnails/"
+    os.makedirs(thumb_folder, exist_ok=True)
+    for file in os.listdir(img_folder):
+        if file.lower().endswith(".webp"):
+            try:
+                image = Image.open(img_folder + file)
+                width, height = image.size
+                width_largest = False
+                if width >= height:
+                    width_largest = True
+                min_len = min((width, height))
+                crop_factor = 0.9
+                nudge_up = (min_len * crop_factor) // 10
+                keep_half_pixels = ((min_len * crop_factor) // 1) // 2
+                width_center = width // 2
+                height_center = height // 2
+                left = width_center - keep_half_pixels
+                right = width_center + keep_half_pixels
+                top = height_center - keep_half_pixels - nudge_up
+                bottom = height_center + keep_half_pixels - nudge_up
+                if top < 0:
+                    diff = 0 - top
+                    top += diff
+                    bottom += diff
+
+                image = image.crop((left, top, right, bottom))
+                image.thumbnail((90,90))
+                image.save(thumb_folder + file.split(".")[0] + ".jpg")
+            except IOError:
+                pass
+
 
 def get_world_data():
-     with open("./worldanvil/npcs.toml", "r") as npcs_toml:
+     with open("./npc_content/npcs.toml", "r") as npcs_toml:
         return toml.load(npcs_toml)
 
 def setup_npcs(location: str = "Prinberg"):
