@@ -154,5 +154,5 @@ async def add_new_npc_channels_and_webhooks(client, personas):
             with open(personas[character]["img"], 'rb') as f:
                 picture = discord.File(f)
                 await new_channel.send(file=picture)
-            await new_channel.send(npc_description + "\nTalk to NPCs.")
+            await new_channel.send(npc_description)
     return added

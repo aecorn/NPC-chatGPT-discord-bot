@@ -44,20 +44,22 @@ def setup_npcs(location: str = "Prinberg"):
     descriptions["world"] = content["world_info_prompt"]
     combined = {}
     for location, factions in content.items():
-        descriptions["location"] = content[location].get("description")
         if isinstance(factions, dict):
+            descriptions["location"] = content[location].get("description")
             for faction, characters in factions.items():
-                descriptions["faction"] = factions[faction].get("description")
                 #print(faction)
                 #print(characters)
                 if isinstance(characters, dict):
-                    for character, attributes in characters.items():       
-                        attributes["prompt"] = make_prompt(attributes, descriptions)
-                        combined[f"{character.lower()}-{faction.lower()}-{location.lower()}"] = attributes
-                        #print(attributes["prompt"])
+                    descriptions["faction"] = factions[faction].get("description")
+                    for character, attributes in characters.items():
+                        if isinstance(attributes, dict):    
+                            attributes["prompt"] = make_prompt(attributes, descriptions)
+                            combined[f"{character.lower()}-{faction.lower()}-{location.lower()}"] = attributes
+                            #print(attributes["prompt"])
     return combined
 
 def make_prompt(attributes, descriptions) -> str:
+    print(attributes)
     prompt = f"""{descriptions["world"]} You are currently located in {descriptions["location"]}. You are a member of the faction {descriptions["faction"]}
 You are a {attributes["race"]} named {attributes["full_name"]}, you would be described by the people close to you as: {attributes["description"]}
 When you speak you {attributes["figure_speech"]}"""
