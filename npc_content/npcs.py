@@ -11,9 +11,6 @@ def make_thumbnails():
             try:
                 image = Image.open(img_folder + file)
                 width, height = image.size
-                width_largest = False
-                if width >= height:
-                    width_largest = True
                 min_len = min((width, height))
                 crop_factor = 0.9
                 nudge_up = (min_len * crop_factor) // 10

@@ -112,7 +112,9 @@ async def create_missing_chatbots(client, personas_at_location):
     for persona, attrs in chatbots_not_on_client.items():
         client.chatbots[persona] = client.get_chatbot_model(prompt=attrs["prompt"])
         # See if chatbot can be restored from file
-        chatbot_path = f"./npc_content/saved_chatbots/{persona}.json"
+        folder = "./npc_content/saved_chatbots/"
+        os.makedirs(folder, exist_ok=True)
+        chatbot_path = "{folder}{persona}.json"
         if os.path.isfile(chatbot_path):
             print("Opening stored chatbot", persona)
             client.chatbots[persona].load(chatbot_path)
@@ -122,8 +124,10 @@ async def remove_unused_chatbots(client, personas_at_location):
                                           if botname not in personas_at_location}
     #print("remove unused chatbots for:", chatbots_on_client_not_at_location)
     # Store chatbot before deletion
+    folder = "./npc_content/saved_chatbots/"
+    os.makedirs(folder, exist_ok=True)
     for botname, chatbot in chatbots_on_client_not_at_location.items():
-        chatbot.save(f"./npc_content/saved_chatbots/{botname}.json")
+        chatbot.save(f"{folder}{botname}.json")
         del client.chatbots[botname]
 
 async def delete_unused_channels(client, personas):
@@ -150,5 +154,5 @@ async def add_new_npc_channels_and_webhooks(client, personas):
             with open(personas[character]["img"], 'rb') as f:
                 picture = discord.File(f)
                 await new_channel.send(file=picture)
-            await new_channel.send(npc_description + "\nUse the command /talk to talk to NPCs.")
+            await new_channel.send(npc_description + "\nTalk to NPCs.")
     return added

@@ -84,7 +84,6 @@ def run_discord_bot():
     async def help(interaction: discord.Interaction):
         await interaction.response.defer(ephemeral=False)
         await interaction.followup.send(""":star: **BASIC COMMANDS** \n
-        - `/talk [message]` Chat with ChatGPT!
         - `/travel` Go somewhere else, with different NPCs.
 """)
 
