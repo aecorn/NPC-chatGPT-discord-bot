@@ -1,6 +1,5 @@
 import discord
 from npc_content.npcs import PERSONAS, LOCATIONS
-from io import BytesIO
 import os
 
 async def setup_npc_channels(client, location="Prinberg"):

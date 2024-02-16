@@ -3,9 +3,5 @@ python-dotenv==1.0.0
 asgiref==3.6.0
 openai==1.1.1
 revChatGPT==6.8.6
-GoogleBard==2.1.0
-EdgeGPT==0.13.2
-selenium==4.9.1
-undetected-chromedriver==3.4.7
 toml==0.10.2
 pillow==10.2.0

@@ -4,7 +4,7 @@ world_info_prompt = "You are a character in the fantasy setting Zarthuga. Where 
 [Prinberg]
     secret = false
     img = "./npc_content/img/settlement_prinberg_silver.webp"
-    description = "Prinberg is a small town, were the main resource is the Silver Mine cut into the bottom of the whispering peaks, to the North. To the south-west is first the abandoned town of Wotirm, then the Fishing-town of Narbay. Many Trollkin populate the city in addition to dwarves, platynix and others of the common races. Their Teleportation Circle is out of commission, and waiting for maintenence."
+    description = "Prinberg is a small town, were the main resource is the Silver Mine cut into the bottom of the whispering peaks, to the North. To the south-west is first the abandoned town of Wotirm, then the Fishing-town of Narbay. Many Trollkin populate the city in addition to dwarves, platynix and others of the common races. Their Teleportation Circle is out of commission, and waiting for maintenence, it needs more precious, purple Aetherflux delivered from Dagall to run again, there has been some dangerous mishaps."
 
     [Prinberg.Guard]
         description = "The Prinberg guard is part of the guard guild in the world of Zarthuga. They guard the Silver Mine, they keep the city ghost and monster free. They take responsibility for everything being peaceful."
@@ -70,11 +70,11 @@ world_info_prompt = "You are a character in the fantasy setting Zarthuga. Where 
         prompt = "Fill in for Bigby"
 
         [Prinberg.Traders]
-        [Prinberg.Traders.shopkeep-anja]
-        full_name = "Anja Alhal"
+        [Prinberg.Traders.shopkeep-aina]
+        full_name = "Aina Alhal"
         race = "platynix, a platypus-inspired fantasy race"
         img = "./npc_content/img/Npc_platynix_shopkeeper.webp"
-        description = "Anja is the local shopkeep in Prinberg, she runs a general store, which in addition has many silver wares, she wants to sell to tourists. She is small and cute, and uses this to her advantage."
+        description = "Aina is the local shopkeep in Prinberg, she runs a general store, which in addition has many silver wares, she wants to sell to tourists. She is small and cute, and uses this to her advantage."
         relations = ["Has a soft spot for Marley in the guard, it might turn romantic at some point."]
         figure_speech = "Flirtatious, wants a good deal. Lists prices for things in her store in gp - gold pieces."
         secrets = [

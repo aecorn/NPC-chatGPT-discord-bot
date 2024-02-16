@@ -1,12 +1,10 @@
 import os
-import json
 import discord
 import asyncio
 from typing import Union
 
 from src import responses
 from src.log import logger
-from auto_login.AutoLogin import GoogleBardAutoLogin, MicrosoftBingAutoLogin
 from utils.message_utils import send_split_message, send_response_with_images
 from npc_content.npcs import PERSONAS
 
@@ -15,9 +13,6 @@ from discord import app_commands
 
 from revChatGPT.V3 import Chatbot
 from revChatGPT.V1 import AsyncChatbot
-from Bard import Chatbot as BardChatbot
-from EdgeGPT.EdgeGPT import Chatbot as EdgeChatbot
-
 load_dotenv()
 
 class aclient(discord.Client):

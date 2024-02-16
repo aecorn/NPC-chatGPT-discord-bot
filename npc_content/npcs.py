@@ -59,7 +59,7 @@ def setup_npcs(location: str = "Prinberg"):
     return combined
 
 def make_prompt(attributes, descriptions) -> str:
-    print(attributes)
+    #print(attributes)
     prompt = f"""{descriptions["world"]} You are currently located in {descriptions["location"]}. You are a member of the faction {descriptions["faction"]}
 You are a {attributes["race"]} named {attributes["full_name"]}, you would be described by the people close to you as: {attributes["description"]}
 When you speak you {attributes["figure_speech"]}"""
