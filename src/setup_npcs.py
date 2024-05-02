@@ -113,6 +113,7 @@ async def create_missing_chatbots(client, personas_at_location):
     chatbots_not_on_client = {name: attrs for name, attrs in personas_at_location.items() if name not in client.chatbots}
     #print("create chatbots for:", chatbots_not_on_client)
     for persona, attrs in chatbots_not_on_client.items():
+        print(attrs["prompt"])
         client.chatbots[persona] = client.get_chatbot_model(prompt=attrs["prompt"])
         # See if chatbot can be restored from file
         folder = "./npc_content/saved_chatbots/"

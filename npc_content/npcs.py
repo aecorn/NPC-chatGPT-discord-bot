@@ -52,16 +52,18 @@ def insert_npc_prompts():
     return result
 
 def make_prompt(npc_data) -> str:
-    prompt = "Hi I want you to take the role as an NPC from a fantasy world called Zarthuga. Here is some info about the world.\n"
-    prompt += toml.dumps(npc_data["world"])
+    prompt = toml.dumps(npc_data["world"])
     if "location" in npc_data:
-        prompt += "\n\nYou live in a place in this world, here is more information of your current whereabouts:\n"
-        prompt += toml.dumps(npc_data["location"])
-    prompt += "\n\nThis is data about the character you will be playing as a dictionary:\n"
+        prompt += "\n\nYou are currently in this location:\n"
+        if "Summary" in npc_data["location"]:
+            prompt += npc_data["location"]["Summary"]
+        else:
+            prompt += toml.dumps(npc_data["location"])
+    prompt += "\n\nThis is data about the character you will be playing:\n"
     prompt += toml.dumps(npc_data["character"])
     hook = npc_data.get("hook")
     if hook:
-        prompt += "\n\nIf someone offers to help you, you can tell them of this issue, that worries you a bit:\n"
+        prompt += "\n\nIf someone offers to help you, you can tell them of this issue:\n"
         prompt += hook
     return prompt
 

@@ -51,7 +51,7 @@ def parse_vault():
     print(npc_paths)
 
     world_info = parse_markdown(f"{BASEPATH}Campaigns/A time for magic/staging/NPCs/World prompt.md")
-    #print(world_info)
+    print(world_info)
     hooks = parse_markdown(f"{BASEPATH}Campaigns/A time for magic/staging/Current Plot Hooks.md")
     hooks = {k: [x.strip("\n") for x in v.split("- ") if x] for k, v in hooks.items()}
 
