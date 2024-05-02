@@ -52,6 +52,7 @@ def insert_npc_prompts():
     return result
 
 def make_prompt(npc_data) -> str:
+    prompt = "You will be playing an NPC in a fantasy world:"
     prompt = toml.dumps(npc_data["world"])
     if "location" in npc_data:
         prompt += "\n\nYou are currently in this location:\n"
@@ -59,7 +60,7 @@ def make_prompt(npc_data) -> str:
             prompt += npc_data["location"]["Summary"]
         else:
             prompt += toml.dumps(npc_data["location"])
-    prompt += "\n\nThis is data about the character you will be playing:\n"
+    prompt += "\n\nThis is information about the character you will act as:\n"
     prompt += toml.dumps(npc_data["character"])
     hook = npc_data.get("hook")
     if hook:
