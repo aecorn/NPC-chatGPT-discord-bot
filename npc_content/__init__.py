@@ -1,1 +1,1 @@
-from npc_content.npcs import setup_npcs
+from npc_content.npcs import setup_npcs_constants

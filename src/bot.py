@@ -6,15 +6,17 @@ from src.log import logger
 from random import randrange
 from src.aclient import client
 from discord import app_commands
-from src import log, personas, responses, setup_npcs
-from npc_content.npcs import PERSONAS, LOCATIONS
+from discord.ext.commands import has_permissions
+from src import responses, setup_npcs
+from npc_content.npcs import setup_npcs_constants
 
 
 def run_discord_bot():
     @client.event
     async def on_ready():
-        for persona in PERSONAS:
-            await client.send_start_prompt(persona)
+        PERSONAS, WORLD_INFO, LOCATIONS = setup_npcs_constants()
+        for persona in PERSONAS.values():
+            await client.send_start_prompt(persona.get("prompt"))
         await client.tree.sync()
         
         await client.wait_until_ready()
@@ -26,10 +28,11 @@ def run_discord_bot():
 
     @client.event
     async def on_member_join(member):
-        await member.send(LOCATIONS["intro"])
+        await member.send(WORLD_INFO["Description"])
 
 
     @client.tree.command(name="travel", description="Move to different location, with other NPCs")
+    @has_permissions(administrator=True)
     async def travel(interaction: discord.Interaction, *, location: str):
         await interaction.response.defer(ephemeral=False)
         username = str(interaction.user)
@@ -37,15 +40,15 @@ def run_discord_bot():
             f"\x1b[31m{username}\x1b[0m : /travel [{location}] in ({client.current_channel})")
         await setup_npcs.setup_npc_channels(client, location)
 
-    @client.tree.command(name="locations", description="List available locations to travel to")
-    async def locations(interaction: discord.Interaction):
-        await interaction.response.defer(ephemeral=False)
-        username = str(interaction.user)
-        logger.info(
-            f"\x1b[31m{username}\x1b[0m : /locations in ({client.current_channel})")
-        filtered_locations = [name for name, attributes in LOCATIONS.items() if isinstance(attributes, dict) and not attributes["secret"]]
-        locations_str = "Locations you can /travel to are:\n" + "\n".join(filtered_locations)
-        await interaction.followup.send(locations_str)
+#    @client.tree.command(name="locations", description="List available locations to travel to")
+#    async def locations(interaction: discord.Interaction):
+#        await interaction.response.defer(ephemeral=False)
+#        username = str(interaction.user)
+#        logger.info(
+#            f"\x1b[31m{username}\x1b[0m : /locations in ({client.current_channel})")
+#        filtered_locations = [name for name, attributes in LOCATIONS.items() if isinstance(attributes, dict) and not attributes["secret"]]
+#        locations_str = "Locations you can /travel to are:\n" + "\n".join(filtered_locations)
+#        await interaction.followup.send(locations_str)
 
 
     #@client.tree.command(name="talk", description="Talk to an NPC")

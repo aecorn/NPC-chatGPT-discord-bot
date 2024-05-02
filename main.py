@@ -1,8 +1,8 @@
 import sys
 import pkg_resources
 
-from npc_content import setup_npcs
 from npc_content.npcs import make_thumbnails
+from npc_content.parse_obsidian import parse_vault
 from src import bot
 from src.log import logger
 from dotenv import load_dotenv
@@ -30,6 +30,6 @@ def check_version() -> None:
 
 if __name__ == '__main__':
     check_version()
-    setup_npcs()
     make_thumbnails()
+    parse_vault()
     bot.run_discord_bot()

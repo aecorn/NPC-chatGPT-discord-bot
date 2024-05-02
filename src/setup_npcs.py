@@ -1,13 +1,16 @@
 import discord
-from npc_content.npcs import PERSONAS, LOCATIONS
+from npc_content.npcs import setup_npcs_constants
+
 import os
 
 async def setup_npc_channels(client, location="Prinberg"):
     
     added, deleted = [], []
-    
+    PERSONAS, WORLD_INFO, LOCATIONS = setup_npcs_constants()
+    print([(x["character"]["first-name"], x["character"]["lives"]) for x in PERSONAS.values()])
+    personas_at_location = {"-".join([x for x in k.lower().replace("-", "").replace("'","").split(" ") if x]): v for k, v in PERSONAS.items() if v["character"].get("lives").replace("[","").replace("]","").replace('"',"") == location}
 
-    personas_at_location = {k: v for k, v in PERSONAS.items() if k.lower().endswith(location.lower())}
+    print(personas_at_location.keys())
 
 
     await keep_webhooks_for_npcs(client, personas_at_location)
@@ -33,11 +36,11 @@ async def setup_npc_channels(client, location="Prinberg"):
         npc_string = "\n".join(deleted)
         msg_str += f"\ndeleting these NPCs (the history in the channels are gone):\n{npc_string}\n"
 
-    locations_img = {k.lower(): v.get("img", None) for k, v in LOCATIONS.items() if isinstance(v, dict) and "img" in v}
-    with open(locations_img[location.lower()], 'rb') as f:
+    locations_img = LOCATIONS[location]["image_link"]
+    print(locations_img)
+    with open(locations_img, 'rb') as f:
         loc_picture = discord.File(f)
-    locations_descriptions = {k.lower(): v.get("description", None) for k, v in LOCATIONS.items() if isinstance(v, dict) and "img" in v}
-    await travel_log.send(msg_str + locations_descriptions[location.lower()], file=loc_picture)
+    await travel_log.send(msg_str + LOCATIONS[location]["Atmosphere"].replace("[","").replace("]",""), file=loc_picture)
 
 
 def get_guild(client):
@@ -63,7 +66,7 @@ async def get_npc_channels(client):
 
 async def get_travel_log_channel(client):
     for maincategory in get_guild(client).categories:
-        if maincategory.name == "Text Channels":
+        if maincategory.name == "A Time for Magic - Campaign":
             break
     possib_travel = [cha for cha in maincategory.channels if cha.name == "travel-log"]
     if not possib_travel:
@@ -78,15 +81,15 @@ async def keep_webhooks_for_npcs(client, personas):
     #print(list(personas.keys()))
     #print([cha.name for cha in channels])
     #print([cha.name for cha in channels if cha.name ])
-    for del_cha in [channel for channel in channels if channel.name not in list(personas.keys())]:
+    for del_cha in [channel for channel in channels if channel.name not in personas]:
         #print("found channel to delete webhooks from", del_cha.name)
         hooks = await del_cha.webhooks()
         for hook in hooks:
             await hook.delete()
-    for keep_cha in [channel for channel in channels if channel.name in list(personas.keys())]:
-        #print("found channel to keep", keep_cha.name)
+    for keep_cha in [channel for channel in channels if channel.name in personas]:
+        print("found channel to keep", keep_cha.name)
         keep_channel_webhooks = await keep_cha.webhooks()
-        #print(keep_channel_webhooks)
+        print(keep_channel_webhooks)
         if keep_channel_webhooks:
             #print("Found exisitng webhook on existing channel, that we want to keep", keep_cha.name)
             client.webhooks[keep_cha.name] = keep_channel_webhooks[0]
@@ -94,15 +97,16 @@ async def keep_webhooks_for_npcs(client, personas):
             await create_webhook_with_avatar(client, personas, keep_cha)
 
 async def create_webhook_with_avatar(client, personas, channel):
-    #print("Creating webhook on existing channel, that we want to keep", channel.name)
-    split_path = personas[channel.name]["img"].split("/")
+    print("Creating webhook on existing channel, that we want to keep", channel.name)
+    #print(personas)
+    split_path = personas[channel.name]["character"]["image_link"].split("/")
     split_path.insert(-1, "thumbnails")
     split_path[-1] = split_path[-1].split(".")[0] + ".jpg"
     thumb_path = "/".join(split_path)
     with open(thumb_path, 'rb') as f:
         buf = f.read()
     client.webhooks[channel.name] = await channel.create_webhook(
-        name=personas[channel.name]["full_name"],
+        name=personas[channel.name]["character"].get("first-name") + " " + personas[channel.name]["character"].get("last-name"),
         avatar=buf) 
 
 async def create_missing_chatbots(client, personas_at_location):
@@ -147,10 +151,10 @@ async def add_new_npc_channels_and_webhooks(client, personas):
         if character not in [cha.name for cha in npc_channels]:
             added += [character]
             new_channel = await npc_category.create_text_channel(character)
-            #print("Want to add webhook to new_channel")
+            print("Want to add webhook to new_channel")
             await create_webhook_with_avatar(client, personas, new_channel)
-            npc_description = personas[character]["full_name"] + ":\n" + personas[character]["description"]
-            with open(personas[character]["img"], 'rb') as f:
+            npc_description = personas[character]["character"]["first-name"] + " " + personas[character]["character"]["last-name"] + ":\n" + personas[character]["character"]["At first sight"]
+            with open(personas[character]["character"]["image_link"], 'rb') as f:
                 picture = discord.File(f)
                 await new_channel.send(file=picture)
             await new_channel.send(npc_description)

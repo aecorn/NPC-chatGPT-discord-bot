@@ -1,9 +1,13 @@
-import os
+import os, glob
 import toml
 from PIL import Image
+from npc_content.base_path import BASEPATH
+
+def get_npc_portraits():
+    pass
 
 def make_thumbnails():
-    img_folder = "./npc_content/img/"
+    img_folder = f"{BASEPATH}assets/images/"
     thumb_folder = img_folder + "thumbnails/"
     os.makedirs(thumb_folder, exist_ok=True)
     for file in os.listdir(img_folder):
@@ -33,43 +37,45 @@ def make_thumbnails():
                 pass
 
 
-def get_world_data():
-     with open("./npc_content/npcs.toml", "r") as npcs_toml:
-        return toml.load(npcs_toml)
+def get_npc_data():
+    all_npcs = {}
+    for npc_path in glob.glob("./npc_content/npc_tomls/*.toml"):
+        with open(npc_path, "r") as npc_file:
+            npc = toml.load(npc_file)
+        all_npcs[npc_path.split("/")[-1].split(".")[0]] = npc
+    return all_npcs
 
-def setup_npcs(location: str = "Prinberg"):
+def insert_npc_prompts():
+    result = get_npc_data().copy()
+    for npc, data in get_npc_data().items():
+        result[npc]["prompt"] = make_prompt(data)
+    return result
 
-    content = get_world_data()
-    descriptions = {}
-    descriptions["world"] = content["world_info_prompt"]
-    combined = {}
-    for location, factions in content.items():
-        if isinstance(factions, dict):
-            descriptions["location"] = content[location].get("description")
-            for faction, characters in factions.items():
-                #print(faction)
-                #print(characters)
-                if isinstance(characters, dict):
-                    descriptions["faction"] = factions[faction].get("description")
-                    for character, attributes in characters.items():
-                        if isinstance(attributes, dict):    
-                            attributes["prompt"] = make_prompt(attributes, descriptions)
-                            combined[f"{character.lower()}-{faction.lower()}-{location.lower()}"] = attributes
-                            #print(attributes["prompt"])
-    return combined
-
-def make_prompt(attributes, descriptions) -> str:
-    #print(attributes)
-    prompt = f"""{descriptions["world"]} You are currently located in {descriptions["location"]}. You are a member of the faction {descriptions["faction"]}
-You are a {attributes["race"]} named {attributes["full_name"]}, you would be described by the people close to you as: {attributes["description"]}
-When you speak you {attributes["figure_speech"]}"""
-    if attributes["relations"]:
-        close_relations = "Someone else close to you is:".join(attributes["relations"])
-        prompt += f"The people close to you are: {close_relations}"
-    if attributes["secrets"]:
-        prompt += "They know some of your secrets. You will be very hesitant to reveal your secrets to the person you are talking to. But if you feel confident in the person you are talking to, and they manage to convince you, you may tell them one of your secrets: """ + ". Next secret: ".join(attributes["secrets"]) + ""
-    prompt += "Answer the following conversation as the character described earlier, and only as this character. Feel free to describe actions the character does."
+def make_prompt(npc_data) -> str:
+    prompt = "Hi I want you to take the role as an NPC from a fantasy world called Zarthuga. Here is some info about the world.\n"
+    prompt += toml.dumps(npc_data["world"])
+    if "location" in npc_data:
+        prompt += "\n\nYou live in a place in this world, here is more information of your current whereabouts:\n"
+        prompt += toml.dumps(npc_data["location"])
+    prompt += "\n\nThis is data about the character you will be playing as a dictionary:\n"
+    prompt += toml.dumps(npc_data["character"])
+    hook = npc_data.get("hook")
+    if hook:
+        prompt += "\n\nIf someone offers to help you, you can tell them of this issue, that worries you a bit:\n"
+        prompt += hook
     return prompt
 
-PERSONAS = setup_npcs()
-LOCATIONS = get_world_data()
+def setup_npcs_constants():
+    PERSONAS = insert_npc_prompts()
+    WORLD_INFO = PERSONAS[list(PERSONAS.keys())[0]].get("world")
+    
+    LOCATIONS = {}
+    for character in PERSONAS.values():
+        lives = character["character"].get("lives")
+        if lives not in LOCATIONS:
+            LOCATIONS[lives] = character["location"]
+    return PERSONAS, WORLD_INFO, LOCATIONS
+    #print(LOCATION.get("image_link"))
+
+if __name__ == "__main__":
+    setup_npcs_constants()

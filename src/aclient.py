@@ -6,7 +6,7 @@ from typing import Union
 from src import responses
 from src.log import logger
 from utils.message_utils import send_split_message, send_response_with_images
-from npc_content.npcs import PERSONAS
+from npc_content.npcs import setup_npcs_constants
 
 from dotenv import load_dotenv
 from discord import app_commands
@@ -91,6 +91,7 @@ class aclient(discord.Client):
     async def send_start_prompt(self, persona):
         discord_channel_id = os.getenv("DISCORD_CHANNEL_ID")
         try:
+            PERSONAS, WORLD_INFO, LOCATIONS = setup_npcs_constants()
             for persona, attributes in PERSONAS.items():
                 prompt = attributes.get("prompt", None)
                 if prompt:
