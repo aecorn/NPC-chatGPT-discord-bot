@@ -77,7 +77,7 @@ def setup_npcs_constants():
     
     LOCATIONS = {}
     for character in PERSONAS.values():
-        lives = character["character"].get("lives")
+        lives = character["character"].get("lives").replace('"',"").replace("[","").replace("]","")
         if lives not in LOCATIONS:
             LOCATIONS[lives] = character["location"]
     return PERSONAS, WORLD_INFO, LOCATIONS

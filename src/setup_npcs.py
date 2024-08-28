@@ -7,7 +7,7 @@ async def setup_npc_channels(client, location="Prinberg"):
     
     added, deleted = [], []
     PERSONAS, WORLD_INFO, LOCATIONS = setup_npcs_constants()
-    print([(x["character"]["first-name"], x["character"]["lives"]) for x in PERSONAS.values()])
+    print([(x["character"]["first-name"], x["character"]["lives"].strip('"').replace("[","").replace("]","")) for x in PERSONAS.values()])
     personas_at_location = {"-".join([x for x in k.lower().replace("-", "").replace("'","").split(" ") if x]): v for k, v in PERSONAS.items() if v["character"].get("lives").replace("[","").replace("]","").replace('"',"") == location}
 
     print(personas_at_location.keys())
