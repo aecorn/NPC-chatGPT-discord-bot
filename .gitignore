@@ -1,6 +1,7 @@
 # Generated image files
 images/
 
+/npc_content/npc_tomls/*.toml
 /npc_content/saved_chatbots/*.json
 /npc_content/prompts/*.toml
 /npc_content/img/thumbnails/*.jpg

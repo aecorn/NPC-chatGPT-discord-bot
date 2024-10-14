@@ -154,7 +154,9 @@ async def add_new_npc_channels_and_webhooks(client, personas):
             new_channel = await npc_category.create_text_channel(character)
             print("Want to add webhook to new_channel")
             await create_webhook_with_avatar(client, personas, new_channel)
-            npc_description = personas[character]["character"]["first-name"] + " " + personas[character]["character"]["last-name"] + ":\n" + personas[character]["character"]["At first sight"]
+            npc_description = (personas[character]["character"]["first-name"] + " " + 
+                               personas[character]["character"]["last-name"] + ":\n" + 
+                               personas[character]["character"]["At first sight"].replace("[","").replace("]",""))
             with open(personas[character]["character"]["image_link"], 'rb') as f:
                 picture = discord.File(f)
                 await new_channel.send(file=picture)

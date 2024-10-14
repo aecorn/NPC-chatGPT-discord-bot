@@ -82,12 +82,14 @@ def parse_vault():
             # Random plot hook for npc
             if char_lives in hooks:
                 loc_hooks = hooks[char_lives]
+                chosen_hooks = []
                 for hook in loc_hooks:
                     if not random.randrange(3):
-                        chosen_hook = hook
+                        chosen_hooks += [hook]
+                    if len(chosen_hooks) >= 3:
                         break
                 else:
-                    chosen_hook = hook
+                    chosen_hooks = [hook]
 
 
         prompt_data = {}
@@ -95,7 +97,7 @@ def parse_vault():
         if location_data:
             prompt_data["location"] = location_data
         if chosen_hook:
-            prompt_data["hook"] = chosen_hook
+            prompt_data["hooks"] = chosen_hooks
         prompt_data["character"] = char_data
 
         with open(f"./npc_content/npc_tomls/{character.split('/')[-1].split('.')[0]}.toml", "w") as char_prompt_file:
