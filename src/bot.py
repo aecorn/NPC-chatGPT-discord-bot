@@ -10,6 +10,7 @@ from discord.ext.commands import has_permissions
 from src import responses, setup_npcs
 from npc_content.npcs import setup_npcs_constants
 
+LOCATION = "Prinberg"
 
 def run_discord_bot():
     @client.event
@@ -34,11 +35,13 @@ def run_discord_bot():
     @client.tree.command(name="travel", description="Move to different location, with other NPCs")
     @has_permissions(administrator=True)
     async def travel(interaction: discord.Interaction, *, location: str):
+        global LOCATION
         await interaction.response.defer(ephemeral=False)
         username = str(interaction.user)
         logger.info(
             f"\x1b[31m{username}\x1b[0m : /travel [{location}] in ({client.current_channel})")
-        await setup_npcs.setup_npc_channels(client, location)
+        LOCATION = location
+        await setup_npcs.setup_npc_channels(client, LOCATION)
 
     @client.tree.command(name="delnpcs", description="Delete NPC channels")
     @has_permissions(administrator=True)
@@ -56,11 +59,12 @@ def run_discord_bot():
     @client.tree.command(name="createnpcs", description="Create NPC channels")
     @has_permissions(administrator=True)
     async def createnpcs(interaction: discord.Interaction, *):
+        global LOCATION
         await interaction.response.defer(ephemeral=False)
         username = str(interaction.user)
         logger.info(
-            f"\x1b[31m{username}\x1b[0m : /createnpcs from ({client.current_channel})")
-        await setup_npcs.setup_npc_channels(client)
+            f"\x1b[31m{username}\x1b[0m : /createnpcs from ({client.current_channel}) for location: {LOCATION}")
+        await setup_npcs.setup_npc_channels(client, LOCATION)
 
 
 #    @client.tree.command(name="locations", description="List available locations to travel to")
