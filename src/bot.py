@@ -69,16 +69,16 @@ def run_discord_bot():
         await client.enqueue_message(interaction, message)
 
 
-    @client.tree.command(name="locations", description="List available locations to travel to")
-    @has_permissions(administrator=True)
-    async def locations(interaction: discord.Interaction):
-        await interaction.response.defer(ephemeral=False)
-        username = str(interaction.user)
-        logger.info(
-            f"\x1b[31m{username}\x1b[0m : /locations in ({client.current_channel})")
-        filtered_locations = [name for name, attributes in setup_npcs.LOCATIONS.items() if isinstance(attributes, dict) and not attributes["secret"]]
-        locations_str = "Locations you can /travel to are:\n" + "\n".join(filtered_locations)
-        await interaction.followup.send(locations_str)
+#    @client.tree.command(name="locations", description="List available locations to travel to")
+#    @has_permissions(administrator=True)
+#    async def locations(interaction: discord.Interaction):
+#        await interaction.response.defer(ephemeral=False)
+#        username = str(interaction.user)
+#        logger.info(
+#            f"\x1b[31m{username}\x1b[0m : /locations in ({client.current_channel})")
+#        filtered_locations = [name for name, attributes in setup_npcs.LOCATIONS.items() if isinstance(attributes, dict) and not attributes["secret"]]
+#        locations_str = "Locations you can /travel to are:\n" + "\n".join(filtered_locations)
+#        await interaction.followup.send(locations_str)
 
 
     #@client.tree.command(name="talk", description="Talk to an NPC")

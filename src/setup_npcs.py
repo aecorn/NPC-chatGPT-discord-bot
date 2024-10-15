@@ -4,10 +4,10 @@ from src.log import logger
 
 import os
 
-PERSONAS, WORLD_INFO, LOCATIONS = setup_npcs_constants()
+
 
 async def setup_npc_channels(client, location="Prinberg"):
-    global LOCATIONS
+    PERSONAS, WORLD_INFO, LOCATIONS = setup_npcs_constants()
     if not location in LOCATIONS:
         logger.info(f"No data for location {location}, skipping setting up npcs.")
         return None
