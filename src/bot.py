@@ -45,7 +45,7 @@ def run_discord_bot():
 
     @client.tree.command(name="delnpcs", description="Delete NPC channels")
     @has_permissions(administrator=True)
-    async def delnpcs(interaction: discord.Interaction, *):
+    async def delnpcs(interaction: discord.Interaction):
         await interaction.response.defer(ephemeral=False)
         username = str(interaction.user)
         logger.info(
@@ -58,7 +58,7 @@ def run_discord_bot():
 
     @client.tree.command(name="createnpcs", description="Create NPC channels")
     @has_permissions(administrator=True)
-    async def createnpcs(interaction: discord.Interaction, *):
+    async def createnpcs(interaction: discord.Interaction):
         global LOCATION
         await interaction.response.defer(ephemeral=False)
         username = str(interaction.user)

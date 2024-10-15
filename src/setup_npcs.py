@@ -1,10 +1,13 @@
 import discord
 from npc_content.npcs import setup_npcs_constants
+from src.log import logger
 
 import os
 
 async def setup_npc_channels(client, location="Prinberg"):
-    
+    if not location in LOCATIONS:
+        logger.info(f"No data for location {location}, skipping setting up npcs.")
+        return None
     added, deleted = [], []
     PERSONAS, WORLD_INFO, LOCATIONS = setup_npcs_constants()
     print([(x["character"]["first-name"], x["character"]["lives"].strip('"').replace("[","").replace("]","")) for x in PERSONAS.values()])
