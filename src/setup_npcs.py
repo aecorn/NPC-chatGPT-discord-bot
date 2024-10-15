@@ -4,12 +4,14 @@ from src.log import logger
 
 import os
 
+PERSONAS, WORLD_INFO, LOCATIONS = setup_npcs_constants()
+
 async def setup_npc_channels(client, location="Prinberg"):
+    global LOCATIONS
     if not location in LOCATIONS:
         logger.info(f"No data for location {location}, skipping setting up npcs.")
         return None
     added, deleted = [], []
-    PERSONAS, WORLD_INFO, LOCATIONS = setup_npcs_constants()
     print([(x["character"]["first-name"], x["character"]["lives"].strip('"').replace("[","").replace("]","")) for x in PERSONAS.values()])
     personas_at_location = {"-".join([x for x in k.lower().replace("-", "").replace("'","").split(" ") if x]): v for k, v in PERSONAS.items() if v["character"].get("lives").replace("[","").replace("]","").replace('"',"") == location}
 

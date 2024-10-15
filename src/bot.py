@@ -29,7 +29,7 @@ def run_discord_bot():
 
     @client.event
     async def on_member_join(member):
-        await member.send(WORLD_INFO["Description"])
+        await member.send(setup_npcs.WORLD_INFO["Description"])
 
 
     @client.tree.command(name="travel", description="Move to different location, with other NPCs")
@@ -48,13 +48,14 @@ def run_discord_bot():
     async def delnpcs(interaction: discord.Interaction):
         await interaction.response.defer(ephemeral=False)
         username = str(interaction.user)
-        logger.info(
-            f"\x1b[31m{username}\x1b[0m : /delnpcs from ({client.current_channel})")
+        message = f"\x1b[31m{username}\x1b[0m : /delnpcs from ({client.current_channel})"
+        logger.info(message)
         npc_channels = await setup_npcs.get_npc_channels()
         for npc_channel in npc_channels:
             await npc_channel.delete()
         npc_category = await setup_npcs.get_npc_category()
         await npc_category.delete()
+        await client.enqueue_message(interaction, message)
 
     @client.tree.command(name="createnpcs", description="Create NPC channels")
     @has_permissions(administrator=True)
@@ -62,20 +63,22 @@ def run_discord_bot():
         global LOCATION
         await interaction.response.defer(ephemeral=False)
         username = str(interaction.user)
-        logger.info(
-            f"\x1b[31m{username}\x1b[0m : /createnpcs from ({client.current_channel}) for location: {LOCATION}")
+        message = f"\x1b[31m{username}\x1b[0m : /createnpcs from ({client.current_channel}) for location: {LOCATION}"
+        logger.info(message)
         await setup_npcs.setup_npc_channels(client, LOCATION)
+        await client.enqueue_message(interaction, message)
 
 
-#    @client.tree.command(name="locations", description="List available locations to travel to")
-#    async def locations(interaction: discord.Interaction):
-#        await interaction.response.defer(ephemeral=False)
-#        username = str(interaction.user)
-#        logger.info(
-#            f"\x1b[31m{username}\x1b[0m : /locations in ({client.current_channel})")
-#        filtered_locations = [name for name, attributes in LOCATIONS.items() if isinstance(attributes, dict) and not attributes["secret"]]
-#        locations_str = "Locations you can /travel to are:\n" + "\n".join(filtered_locations)
-#        await interaction.followup.send(locations_str)
+    @client.tree.command(name="locations", description="List available locations to travel to")
+    @has_permissions(administrator=True)
+    async def locations(interaction: discord.Interaction):
+        await interaction.response.defer(ephemeral=False)
+        username = str(interaction.user)
+        logger.info(
+            f"\x1b[31m{username}\x1b[0m : /locations in ({client.current_channel})")
+        filtered_locations = [name for name, attributes in setup_npcs.LOCATIONS.items() if isinstance(attributes, dict) and not attributes["secret"]]
+        locations_str = "Locations you can /travel to are:\n" + "\n".join(filtered_locations)
+        await interaction.followup.send(locations_str)
 
 
     #@client.tree.command(name="talk", description="Talk to an NPC")
