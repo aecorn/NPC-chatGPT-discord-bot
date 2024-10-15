@@ -40,6 +40,29 @@ def run_discord_bot():
             f"\x1b[31m{username}\x1b[0m : /travel [{location}] in ({client.current_channel})")
         await setup_npcs.setup_npc_channels(client, location)
 
+    @client.tree.command(name="delnpcs", description="Delete NPC channels")
+    @has_permissions(administrator=True)
+    async def delnpcs(interaction: discord.Interaction, *):
+        await interaction.response.defer(ephemeral=False)
+        username = str(interaction.user)
+        logger.info(
+            f"\x1b[31m{username}\x1b[0m : /delnpcs from ({client.current_channel})")
+        npc_channels = await setup_npcs.get_npc_channels()
+        for npc_channel in npc_channels:
+            await npc_channel.delete()
+        npc_category = await setup_npcs.get_npc_category()
+        await npc_category.delete()
+
+    @client.tree.command(name="createnpcs", description="Create NPC channels")
+    @has_permissions(administrator=True)
+    async def createnpcs(interaction: discord.Interaction, *):
+        await interaction.response.defer(ephemeral=False)
+        username = str(interaction.user)
+        logger.info(
+            f"\x1b[31m{username}\x1b[0m : /createnpcs from ({client.current_channel})")
+        await setup_npcs.setup_npc_channels(client)
+
+
 #    @client.tree.command(name="locations", description="List available locations to travel to")
 #    async def locations(interaction: discord.Interaction):
 #        await interaction.response.defer(ephemeral=False)
