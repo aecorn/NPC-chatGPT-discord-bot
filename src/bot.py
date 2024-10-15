@@ -41,21 +41,23 @@ def run_discord_bot():
         logger.info(
             f"\x1b[31m{username}\x1b[0m : /travel [{location}] in ({client.current_channel})")
         LOCATION = location
-        await setup_npcs.setup_npc_channels(client, LOCATION)
+        result = await setup_npcs.setup_npc_channels(client, LOCATION)
+        if result is None:
+            await client.enqueue_message(interaction, "Could not find this location.")
 
     @client.tree.command(name="delnpcs", description="Delete NPC channels")
     @has_permissions(administrator=True)
     async def delnpcs(interaction: discord.Interaction):
         await interaction.response.defer(ephemeral=False)
         username = str(interaction.user)
-        message = f"\x1b[31m{username}\x1b[0m : /delnpcs from ({client.current_channel})"
+        message = f"{username}: used /delnpcs"
         logger.info(message)
-        npc_channels = await setup_npcs.get_npc_channels()
+        npc_channels = await setup_npcs.get_npc_channels(client)
         for npc_channel in npc_channels:
             await npc_channel.delete()
-        npc_category = await setup_npcs.get_npc_category()
+        npc_category = await setup_npcs.get_npc_category(client)
         await npc_category.delete()
-        await client.enqueue_message(interaction, message)
+        await interaction.followup.send(message)
 
     @client.tree.command(name="createnpcs", description="Create NPC channels")
     @has_permissions(administrator=True)
@@ -63,10 +65,10 @@ def run_discord_bot():
         global LOCATION
         await interaction.response.defer(ephemeral=False)
         username = str(interaction.user)
-        message = f"\x1b[31m{username}\x1b[0m : /createnpcs from ({client.current_channel}) for location: {LOCATION}"
+        message = f"{username} used /createnpcs for location: {LOCATION}"
         logger.info(message)
         await setup_npcs.setup_npc_channels(client, LOCATION)
-        await client.enqueue_message(interaction, message)
+        await interaction.followup.send(message)
 
 
 #    @client.tree.command(name="locations", description="List available locations to travel to")
@@ -133,8 +135,7 @@ def run_discord_bot():
         channelname = message.channel.name
         print(channelname)
         print(client.webhooks.keys())
-        print(client.webhooks[message.channel.name])
-        print(client.webhooks[message.channel.name].name)
+        print(client.webhooks.get(message.channel.name))
         if channelname in client.webhooks:
             print("Channel name is in webhooks")
             print(client.webhooks[channelname].name, client.webhooks[channelname].channel.name)

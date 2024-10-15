@@ -15,7 +15,7 @@ async def setup_npc_channels(client, location="Prinberg"):
     print([(x["character"]["first-name"], x["character"]["lives"].strip('"').replace("[","").replace("]","")) for x in PERSONAS.values()])
     personas_at_location = {"-".join([x for x in k.lower().replace("-", "").replace("'","").split(" ") if x]): v for k, v in PERSONAS.items() if v["character"].get("lives").replace("[","").replace("]","").replace('"',"") == location}
 
-    print(personas_at_location.keys())
+    logger.info(f"Persons at location: {personas_at_location.keys()}")
 
 
     await keep_webhooks_for_npcs(client, personas_at_location)
