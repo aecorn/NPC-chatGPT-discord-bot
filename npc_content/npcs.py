@@ -55,10 +55,10 @@ def make_prompt(npc_data) -> str:
     prompt = "You will be playing an NPC in a fantasy world, put much weight to these details about you:\n"
     prompt += toml.dumps(npc_data["character"])
 
-    hook = npc_data.get("hook")
-    if hook:
-        prompt += "\n\nIf someone offers to help you, you can tell them of this issue:\n"
-        prompt += hook
+    hooks = npc_data.get("hooks")
+    if hooks:
+        prompt += "\n\nIf someone offers to help you, you can tell them of these issues, only answer with one per response, do not reveal them all at once:\n"
+        prompt += " - Next issue: ".join(hooks)
     
     if "location" in npc_data:
         prompt += "\n\nYou are currently in this location in the world:\n"

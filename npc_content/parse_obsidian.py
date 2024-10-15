@@ -96,7 +96,7 @@ def parse_vault():
         prompt_data["world"] = world_info
         if location_data:
             prompt_data["location"] = location_data
-        if chosen_hook:
+        if chosen_hooks:
             prompt_data["hooks"] = chosen_hooks
         prompt_data["character"] = char_data
 
