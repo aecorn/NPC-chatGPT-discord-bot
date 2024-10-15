@@ -118,8 +118,12 @@ def run_discord_bot():
     @client.tree.command(name="help", description="Show help for the bot")
     async def help(interaction: discord.Interaction):
         await interaction.response.defer(ephemeral=False)
-        await interaction.followup.send(""":star: **BASIC COMMANDS** \n
+        await interaction.followup.send("""The Zarthuga-bot enables chatGPT-generating NPCs in each of their own channels.
+                                    
+        :star: **ADMIN COMMANDS** \n
         - `/travel` Go somewhere else, with different NPCs.
+        - `/delnpcs` Delete the NPC channels and Category.
+        - `/createnpcs`Create the NPC channels and Category, from the current location.
 """)
 
         logger.info(
